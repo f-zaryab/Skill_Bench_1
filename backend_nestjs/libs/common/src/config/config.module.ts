@@ -5,10 +5,23 @@ import Joi from 'joi';
 @Module({
   imports: [
     NestConfigModule.forRoot({
+      isGlobal: true,
       validationSchema: Joi.object({
         PORT: Joi.number().default(5001),
+
+        NODE_ENV: Joi.string()
+          .valid('development', 'production', 'test')
+          .default('development'),
+
+        LOG_LEVEL: Joi.string()
+          .valid('fatal', 'error', 'warn', 'info', 'debug', 'trace')
+          .default('debug'),
+
+        LOG_PRETTY: Joi.boolean().default(true),
       }),
     }),
   ],
+
+  exports: [NestConfigModule],
 })
 export class ConfigModule {}
