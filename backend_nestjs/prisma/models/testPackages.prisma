@@ -1,0 +1,116 @@
+// Category -------------------------------------
+model Category {
+  id          String  @id @default(uuid()) @db.Uuid
+  name        String  @unique
+  description String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // RELATIONS ---------------------------------
+
+  // Creator
+  createdByUserId String @db.Uuid
+  createdBy       User   @relation(fields: [createdByUserId], references: [id])
+
+  // Packages belonging to this category
+  testPackages Package[]
+
+  @@index([createdByUserId])
+}
+
+// Test Package -------------------------------------
+model Package {
+  id               String  @id @default(uuid()) @db.Uuid
+  title            String
+  description      String?
+  shortDescription String?
+
+  durationMinutes   Int?
+  passingPercentage Int  @default(70)
+  expReward         Int  @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // RELATIONS ---------------------------------
+
+  // Category
+  categoryId String   @db.Uuid
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  // Creator
+  createdByUserId String @db.Uuid
+  createdBy       User   @relation(fields: [createdByUserId], references: [id])
+
+  // Questions
+  questions TestPackageQuestion[]
+
+  // User Attempts
+  attempts TestAttempt[]
+
+  @@unique([categoryId, title])
+  @@index([createdByUserId])
+  @@index([categoryId])
+}
+
+// Test Package <-> Question -------------------------
+model TestPackageQuestion {
+  position Int
+
+  // RELATIONS ---------------------------------
+  testPackageId String  @db.Uuid
+  testPackage   Package @relation(fields: [testPackageId], references: [id], onDelete: Cascade)
+
+  questionId String       @db.Uuid
+  question   TestQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@id([testPackageId, questionId])
+  // One question can only occupy one position
+  // and two questions cannot share the same position.
+  @@unique([testPackageId, position])
+  @@index([questionId])
+}
+
+// Question ------------------------------------------
+model TestQuestion {
+  id          String       @id @default(uuid()) @db.Uuid
+  title       String
+  description String?
+  type        QuestionType @default(MCQ_SINGLE)
+  points      Int          @default(1)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // RELATIONS ---------------------------------
+
+  // MCQ options
+  mcqOptions McqOption[]
+
+  // Packages containing this question
+  testPackages TestPackageQuestion[]
+
+  // Answers submitted for this question
+  attemptAnswers TestAttemptAnswer[]
+}
+
+enum QuestionType {
+  MCQ_SINGLE
+  MCQ_MULTIPLE
+  CODING
+}
+
+// MCQ Option ----------------------------------------
+model McqOption {
+  id        String  @id @default(uuid()) @db.Uuid
+  text      String
+  isCorrect Boolean @default(false)
+
+  questionId String       @db.Uuid
+  question   TestQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  selectedInAnswers TestAttemptAnswerOption[]
+
+  @@index([questionId])
+}

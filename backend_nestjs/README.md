@@ -28,4 +28,6 @@ npm run prebuild
 
 npm run build
 
+npx prisma studio
+
 ```

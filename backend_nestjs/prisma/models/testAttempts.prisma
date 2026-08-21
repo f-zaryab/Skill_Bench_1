@@ -1,0 +1,75 @@
+// Test Attempt --------------------------------------
+model TestAttempt {
+  id     String        @id @default(uuid()) @db.Uuid
+  status AttemptStatus @default(IN_PROGRESS)
+
+  score      Int?
+  percentage Float?
+  passed     Boolean?
+
+  expAwarded Int @default(0)
+
+  startedAt   DateTime  @default(now())
+  completedAt DateTime?
+
+  // RELATIONS ---------------------------------
+
+  // User taking the test
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id])
+
+  // Test being attempted
+  testPackageId String  @db.Uuid
+  testPackage   Package @relation(fields: [testPackageId], references: [id])
+
+  // User's answers
+  answers TestAttemptAnswer[]
+
+  @@index([userId])
+  @@index([testPackageId])
+  @@index([userId, testPackageId])
+}
+
+enum AttemptStatus {
+  IN_PROGRESS
+  COMPLETED
+  ABANDONED
+}
+
+// Test Attempt Answer -------------------------------
+model TestAttemptAnswer {
+  id String @id @default(uuid()) @db.Uuid
+
+  isCorrect     Boolean?
+  pointsAwarded Int      @default(0)
+
+  answeredAt DateTime @default(now())
+
+  // RELATIONS ---------------------------------
+  // Attempt this answer belongs to
+  attemptId String      @db.Uuid
+  attempt   TestAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+
+  // Question being answered
+  questionId String       @db.Uuid
+  question   TestQuestion @relation(fields: [questionId], references: [id])
+
+  // Selected MCQ options
+  selectedOptions TestAttemptAnswerOption[]
+
+  // One answer per question in a particular attempt
+  @@unique([attemptId, questionId])
+  @@index([questionId])
+}
+
+model TestAttemptAnswerOption {
+  answerId String @db.Uuid
+  optionId String @db.Uuid
+
+  answer TestAttemptAnswer @relation(fields: [answerId], references: [id], onDelete: Cascade)
+
+  option McqOption @relation(fields: [optionId], references: [id])
+
+  @@id([answerId, optionId])
+  @@index([optionId])
+}
