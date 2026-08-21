@@ -1,0 +1,13 @@
+name: skill-bench
+
+services:
+  skillbench-db:
+    image: postgres:16
+    container_name: sb-db-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: skillbenchdb
+    ports:
+      - '5432:5432'
+    
