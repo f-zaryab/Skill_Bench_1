@@ -18,6 +18,8 @@ npx prisma format --schema ./prisma
 <!-- npx prisma migrate dev --name init -->
 npm run prisma:migrate
 
+npx prisma db seed // if needed
+
 npm run start:dev
 
 npm run lint:fix

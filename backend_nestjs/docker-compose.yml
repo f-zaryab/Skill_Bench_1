@@ -10,4 +10,9 @@ services:
       POSTGRES_DB: skillbenchdb
     ports:
       - '5432:5432'
+    volumes:
+      - skillbench-postgres-data:/var/lib/postgresql/data
+      
+  volumes:
+  skillbench-postgres-data:
     
