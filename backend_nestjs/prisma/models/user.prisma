@@ -1,5 +1,5 @@
-model User {
-    Id       Int    @id @default(autoincrement())
-    email    String @unique
-    password String
-}
+// model User {
+//     Id       Int    @id @default(autoincrement())
+//     email    String @unique
+//     password String
+// }
