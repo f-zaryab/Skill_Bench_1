@@ -79,6 +79,7 @@ async function main() {
     update: {},
     create: {
       name: 'React',
+      slug: 'react',
       description: 'React assessments',
       createdByUserId: admin.id,
     },
@@ -91,6 +92,7 @@ async function main() {
     update: {},
     create: {
       name: 'SQL',
+      slug: 'sql',
       description: 'SQL and database assessments',
       createdByUserId: admin.id,
     },

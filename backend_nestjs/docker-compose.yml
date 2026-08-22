@@ -13,6 +13,6 @@ services:
     volumes:
       - skillbench-postgres-data:/var/lib/postgresql/data
       
-  volumes:
+volumes:
   skillbench-postgres-data:
     
