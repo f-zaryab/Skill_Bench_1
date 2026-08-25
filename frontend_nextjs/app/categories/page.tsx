@@ -1,21 +1,36 @@
+import { Container, SimpleGrid, Title } from "@mantine/core";
+import CategoriesCard from "@/features/categories/components/categories-card";
 import getAllCategories from "@/features/categories/server/get-categories";
+import styles from "./page.module.css";
 
 const CategoriesPage = async () => {
   const categories = await getAllCategories();
 
   return (
-    <div>
-      <h1>All Categories Page</h1>
+    <Container
+      size="responsive"
+      bg="customBrown.0"
+      className={styles.container}
+    >
+      <Title order={1} className={styles.title}>
+        Categories
+      </Title>
 
-      <div>
+      <SimpleGrid
+        cols={{ base: 1, sm: 2, lg: 3 }}
+        spacing={{ base: 10, sm: "xl" }}
+        verticalSpacing={{ base: "md", sm: "xl" }}
+      >
         {categories?.map((item) => (
-          <div key={item.id}>
-            <p>{item.name}</p>
-            <p>{item.slug}</p>
-          </div>
+          <CategoriesCard
+            key={item.id}
+            title={item.name}
+            description={item.description}
+            slug={item.slug}
+          />
         ))}
-      </div>
-    </div>
+      </SimpleGrid>
+    </Container>
   );
 };
 
