@@ -6,18 +6,22 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { CategoriesService } from '../application/categories.service';
 import { CreateCategoryDTO } from '../application/dtos/create-category.dto';
 import { UpdateCategoryDTO } from '../application/dtos/update-category.dto';
+import { FindCategoriesQueryDTO } from '../application/dtos/find-categories-query.dto';
 
 @Controller('api/categories')
 export class CategoriesController {
   constructor(private readonly categoryService: CategoriesService) {}
 
   @Get('/')
-  async findAll() {
-    const categories = await this.categoryService.findAll();
+  async findAll(@Query() query: FindCategoriesQueryDTO) {
+    const categories = await this.categoryService.findAll({
+      includePackages: query.include === 'testPackages',
+    });
 
     return {
       success: true,

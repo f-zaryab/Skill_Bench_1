@@ -3,6 +3,7 @@ import { Category } from '../../domain/entities/category';
 import {
   CategoryRepository,
   CreateCategoryData,
+  FindCategoriesOptions,
   UpdateCategoryData,
 } from '../../domain/repositories/category.repository';
 import { PrismaService } from '@app/common/database/prisma/prisma.service';
@@ -13,8 +14,11 @@ export class PrismaCategoryRepository extends CategoryRepository {
     super();
   }
 
-  findAll(): Promise<Category[]> {
+  findAll(options?: FindCategoriesOptions): Promise<Category[]> {
     return this.prisma.category.findMany({
+      include: {
+        testPackages: options?.includePackages ?? false,
+      },
       orderBy: {
         createdAt: 'desc',
       },

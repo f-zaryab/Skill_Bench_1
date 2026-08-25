@@ -13,8 +13,12 @@ export type UpdateCategoryData = {
   description?: string;
 };
 
+export type FindCategoriesOptions = {
+  includePackages?: boolean;
+};
+
 export abstract class CategoryRepository {
-  abstract findAll(): Promise<Category[]>;
+  abstract findAll(options?: FindCategoriesOptions): Promise<Category[]>;
 
   abstract findById(id: string): Promise<Category | null>;
 

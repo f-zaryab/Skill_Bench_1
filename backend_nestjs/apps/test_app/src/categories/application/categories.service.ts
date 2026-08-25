@@ -4,7 +4,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import slugify from 'slugify';
-import { CategoryRepository } from '../domain/repositories/category.repository';
+import {
+  CategoryRepository,
+  FindCategoriesOptions,
+} from '../domain/repositories/category.repository';
 import { CreateCategoryDTO } from './dtos/create-category.dto';
 import { UpdateCategoryDTO } from './dtos/update-category.dto';
 
@@ -12,8 +15,8 @@ import { UpdateCategoryDTO } from './dtos/update-category.dto';
 export class CategoriesService {
   constructor(private readonly categoryRepo: CategoryRepository) {}
 
-  findAll() {
-    return this.categoryRepo.findAll();
+  findAll(options?: FindCategoriesOptions) {
+    return this.categoryRepo.findAll(options);
   }
 
   findById(id: string) {
