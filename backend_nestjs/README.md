@@ -7,6 +7,11 @@
 - npm install prisma @types/pg --save-dev
 - npm install @prisma/client @prisma/adapter-pg pg dotenv
 - npm i --save-dev @types/node
+- npm i --save @nestjs/passport passport passport-local @nestjs/jwt passport-jwt
+- npm install --save-dev @types/passport-local
+- npm install --save-dev @types/passport-jwt
+- npm i bcryptjs
+- npm i -D @types/bcryptjs
 
 ## Running Project (without Volume)
 
