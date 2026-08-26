@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-
 import { Role, SafeUser, User } from '../../domain/entities/user';
 import {
   CreateUserData,
