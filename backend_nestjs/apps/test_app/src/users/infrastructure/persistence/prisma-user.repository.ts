@@ -25,6 +25,30 @@ export class PrismaUserRepository extends UserRepository {
     }
   }
 
+  private toDomainUser(user: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    role: 'SUPER_ADMIN' | 'ADMIN' | 'USER';
+    hashedRefreshToken: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+  }): User {
+    return {
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      password: user.password,
+      role: this.mapRole(user.role),
+      hashedRefreshToken: user.hashedRefreshToken,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
+  }
+
   // METHODS IMPLEMENTED ============================================//
 
   async createUser(data: CreateUserData): Promise<SafeUser> {
@@ -70,6 +94,7 @@ export class PrismaUserRepository extends UserRepository {
         email: true,
         password: true,
         role: true,
+        hashedRefreshToken: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -86,8 +111,37 @@ export class PrismaUserRepository extends UserRepository {
       email: user.email,
       password: user.password,
       role: this.mapRole(user.role),
+      hashedRefreshToken: user.hashedRefreshToken,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     };
+  }
+
+  async findByIdWithRefreshToken(id: string): Promise<User | null> {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+    });
+
+    return user ? this.toDomainUser(user) : null;
+  }
+
+  async updateHashedRefreshToken(
+    userId: string,
+    hashedRefreshToken: string | null,
+  ): Promise<User> {
+    const user = await this.prisma.user.update({
+      where: { id: userId },
+      data: { hashedRefreshToken },
+    });
+
+    return this.toDomainUser(user);
+  }
+
+  async findById(id: string): Promise<User | null> {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+    });
+
+    return user ? this.toDomainUser(user) : null;
   }
 }

@@ -21,6 +21,8 @@ docker compose up
 npx prisma format --schema ./prisma
 
 <!-- npx prisma migrate dev --name init -->
+npx prisma migrate dev --name add_hashed_refresh_token
+
 npm run prisma:migrate
 
 npx prisma db seed // if needed

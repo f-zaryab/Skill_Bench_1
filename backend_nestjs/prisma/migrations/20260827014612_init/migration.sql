@@ -1,14 +1,3 @@
-/*
-  Warnings:
-
-  - The primary key for the `User` table will be changed. If it partially fails, the table could be left without primary key constraint.
-  - You are about to drop the column `Id` on the `User` table. All the data in the column will be lost.
-  - Added the required column `firstName` to the `User` table without a default value. This is not possible if the table is not empty.
-  - The required column `id` was added to the `User` table with a prisma-level default value. This is not possible if the table is not empty. Please add this column as optional, then populate it before making it required.
-  - Added the required column `lastName` to the `User` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `updatedAt` to the `User` table without a default value. This is not possible if the table is not empty.
-
-*/
 -- CreateEnum
 CREATE TYPE "AttemptStatus" AS ENUM ('IN_PROGRESS', 'COMPLETED', 'ABANDONED');
 
@@ -17,17 +6,6 @@ CREATE TYPE "QuestionType" AS ENUM ('MCQ_SINGLE', 'MCQ_MULTIPLE', 'CODING');
 
 -- CreateEnum
 CREATE TYPE "Role" AS ENUM ('SUPER_ADMIN', 'ADMIN', 'USER');
-
--- AlterTable
-ALTER TABLE "User" DROP CONSTRAINT "User_pkey",
-DROP COLUMN "Id",
-ADD COLUMN     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-ADD COLUMN     "firstName" TEXT NOT NULL,
-ADD COLUMN     "id" UUID NOT NULL,
-ADD COLUMN     "lastName" TEXT NOT NULL,
-ADD COLUMN     "role" "Role" NOT NULL DEFAULT 'USER',
-ADD COLUMN     "updatedAt" TIMESTAMP(3) NOT NULL,
-ADD CONSTRAINT "User_pkey" PRIMARY KEY ("id");
 
 -- CreateTable
 CREATE TABLE "Badge" (
@@ -89,6 +67,7 @@ CREATE TABLE "TestAttemptAnswerOption" (
 CREATE TABLE "Category" (
     "id" UUID NOT NULL,
     "name" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
     "description" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -147,6 +126,21 @@ CREATE TABLE "McqOption" (
 );
 
 -- CreateTable
+CREATE TABLE "User" (
+    "id" UUID NOT NULL,
+    "firstName" TEXT NOT NULL,
+    "lastName" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "role" "Role" NOT NULL DEFAULT 'USER',
+    "hashedRefreshToken" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Profile" (
     "id" UUID NOT NULL,
     "bio" TEXT,
@@ -186,6 +180,9 @@ CREATE INDEX "TestAttemptAnswerOption_optionId_idx" ON "TestAttemptAnswerOption"
 CREATE UNIQUE INDEX "Category_name_key" ON "Category"("name");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Category_slug_key" ON "Category"("slug");
+
+-- CreateIndex
 CREATE INDEX "Category_createdByUserId_idx" ON "Category"("createdByUserId");
 
 -- CreateIndex
@@ -205,6 +202,9 @@ CREATE UNIQUE INDEX "TestPackageQuestion_testPackageId_position_key" ON "TestPac
 
 -- CreateIndex
 CREATE INDEX "McqOption_questionId_idx" ON "McqOption"("questionId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Profile_userId_key" ON "Profile"("userId");

@@ -11,4 +11,13 @@ export abstract class UserRepository {
   abstract createUser(data: CreateUserData): Promise<SafeUser>;
 
   abstract getUserByEmail(email: string): Promise<User | null>;
+
+  abstract findById(id: string): Promise<User | null>;
+
+  abstract findByIdWithRefreshToken(id: string): Promise<User | null>;
+
+  abstract updateHashedRefreshToken(
+    userId: string,
+    hashedRefreshToken: string | null,
+  ): Promise<User>;
 }
