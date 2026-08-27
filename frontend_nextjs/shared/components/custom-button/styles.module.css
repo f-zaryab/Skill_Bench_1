@@ -1,0 +1,12 @@
+.root {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  margin: 1rem auto;
+
+  background: var(--mantine-color-deepBlue-6);
+  color: white;
+}
+
+.root:hover {
+  background: var(--mantine-color-cutomRed-1);
+}
