@@ -1,3 +1,9 @@
+## Routes
+
+- categories
+  - slug
+- skill-up
+
 ### Libraries
 
 - npm i ky

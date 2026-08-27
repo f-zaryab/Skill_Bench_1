@@ -33,6 +33,7 @@ export type TestPackage = {
   updatedAt: string;
   categoryId: string;
   createdByUserId: string;
+  slug: string;
 };
 
 export type CategoryAndPackages = {
