@@ -1,11 +1,11 @@
 "use client";
 
 import { Button, type ButtonProps } from "@mantine/core";
-import type React from "react";
 import styles from "./styles.module.css";
 
 type CustomButtonProps = ButtonProps & {
   children: React.ReactNode;
+  type?: "button" | "submit" | "reset";
 };
 
 const CustomButton = ({ children, ...props }: CustomButtonProps) => {
