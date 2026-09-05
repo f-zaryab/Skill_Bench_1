@@ -33,10 +33,16 @@ export class PrismaCategoryRepository extends CategoryRepository {
     });
   }
 
-  findBySlug(slug: string): Promise<Category | null> {
+  findBySlug(
+    slug: string,
+    options?: FindCategoriesOptions,
+  ): Promise<Category | null> {
     return this.prisma.category.findUnique({
       where: {
         slug: slug,
+      },
+      include: {
+        testPackages: options?.includePackages ?? false,
       },
     });
   }

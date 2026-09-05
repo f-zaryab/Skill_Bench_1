@@ -23,8 +23,8 @@ export class CategoriesService {
     return this.categoryRepo.findById(id);
   }
 
-  findBySlug(slug: string) {
-    return this.categoryRepo.findBySlug(slug);
+  findBySlug(slug: string, options?: FindCategoriesOptions) {
+    return this.categoryRepo.findBySlug(slug, options);
   }
 
   async create(dto: CreateCategoryDTO, userId: string) {

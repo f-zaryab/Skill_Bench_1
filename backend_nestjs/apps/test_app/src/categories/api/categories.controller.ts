@@ -42,8 +42,13 @@ export class CategoriesController {
   }
 
   @Get('/slug/:slug')
-  async findBySlug(@Param('slug') slug: string) {
-    const category = await this.categoryService.findBySlug(slug);
+  async findBySlug(
+    @Param('slug') slug: string,
+    @Query() query: FindCategoriesQueryDTO,
+  ) {
+    const category = await this.categoryService.findBySlug(slug, {
+      includePackages: query.include === 'testPackages',
+    });
 
     return {
       success: true,

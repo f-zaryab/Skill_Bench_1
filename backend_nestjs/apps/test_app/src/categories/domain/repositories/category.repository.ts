@@ -24,7 +24,10 @@ export abstract class CategoryRepository {
 
   abstract create(data: CreateCategoryData): Promise<Category>;
 
-  abstract findBySlug(slug: string): Promise<Category | null>;
+  abstract findBySlug(
+    slug: string,
+    options?: FindCategoriesOptions,
+  ): Promise<Category | null>;
 
   abstract update(id: string, data: UpdateCategoryData): Promise<Category>;
 
